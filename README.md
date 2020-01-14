@@ -1,3 +1,3 @@
 # lit-networking
 
-![alt text](https://drive.google.com/file/d/1hxVds2ftrWtCcYOvmGz1qYBABVrKfXRt/view?usp=sharing)
+![alt text](https://i.ibb.co/nLgB7nX/Stickie-Bandits-It-s-Lit-Sticker-266320-front.jpg)
