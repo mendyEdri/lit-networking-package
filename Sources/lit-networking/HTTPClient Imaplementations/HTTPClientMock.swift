@@ -21,7 +21,7 @@ public class HTTPClientMock: HTTPClient {
     }
     
     // MARK: Helpers
-    var requestedURLs: [URL] {
+    public var requestedURLs: [URL] {
         return messages.map { $0.url }
     }
     
