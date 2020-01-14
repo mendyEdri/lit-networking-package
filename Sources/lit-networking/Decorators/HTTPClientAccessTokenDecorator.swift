@@ -28,7 +28,7 @@ public final class HTTPClientAccessTokenDecorator: HTTPClientDecorator {
     private var client: HTTPClient
     private var tokenAdapter: AccessTokenAdapter
     
-    init(http client: HTTPClient, tokenAdapter: AccessTokenAdapter) {
+    public init(http client: HTTPClient, tokenAdapter: AccessTokenAdapter) {
         self.client = client
         self.tokenAdapter = tokenAdapter
     }
