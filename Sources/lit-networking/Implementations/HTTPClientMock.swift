@@ -28,12 +28,10 @@ public class HTTPClientMock: HTTPClient {
     // MARK: Mock
     
     public func complete(with error: Error, at index: Int = 0) {
-        guard index < messages.count else { return }
         messages[index].completion(.failure(error))
     }
     
     public func complete(withSatus code: Int, data: Data, at index: Int = 0) {
-        guard index < messages.count else { return }
         let response = HTTPURLResponse(url: messages[index].url,
                                        statusCode: code,
                                        httpVersion: nil,
