@@ -34,7 +34,7 @@ class HTTPClientRetryDecoratorTests: XCTestCase {
     
     // Mark: Helper
     
-    private func expect(attempts: Int, mock: HTTPClientMock, onRetry: @escaping () -> Void) {
+    private func expect(attempts: Int, mock: HTTPClientMock, onRetryAction: @escaping () -> Void) {
     
         let retryable = RetryNotify(attempts: attempts)!
         let client = HTTPClientRetryDecorator(http: mock, retryable: retryable)
@@ -44,7 +44,7 @@ class HTTPClientRetryDecoratorTests: XCTestCase {
         
         retryable.onRetry = {
             counter += 1
-            onRetry()
+            onRetryAction()
         }
         
         client.get(from: anyURL) { _ in

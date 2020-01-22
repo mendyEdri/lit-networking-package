@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol AccessTokenAdapter {
-    func requestAccessToken(_ completion: (Result<String, Error>) -> Void)
+    func requestAccessToken(_ completion: @escaping (Result<String, Error>) -> Void)
 }
 
 public final class HTTPClientAccessTokenDecorator: HTTPClientDecorator {
