@@ -34,6 +34,7 @@ public final class HTTPClientAccessTokenDecorator: HTTPClientDecorator {
     }
     
     public func get(from url: URL, method: HTTPMethod, headers: [String : String]?, body: [String : String]?, completion: @escaping (HTTPClient.Result) -> Void) {
+        #warning("TODO: make it serial")
         tokenAdapter.requestAccessToken { [weak self] result in
             guard let self = self else { return }
 
@@ -42,6 +43,7 @@ public final class HTTPClientAccessTokenDecorator: HTTPClientDecorator {
                 completion(.failure(error))
 
             case let .success(token):
+                #warning("TODO: save the requests in queue, in order to have multiple request support")
                 let decoratedHeaders = headers?.appendAuth(token: token)
                 self.client.get(from: url, method: method, headers: decoratedHeaders, body: body, completion: completion)
             }

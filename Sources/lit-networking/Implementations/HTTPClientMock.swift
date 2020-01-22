@@ -32,6 +32,7 @@ public class HTTPClientMock: HTTPClient {
     }
     
     public func complete(withSatus code: Int, data: Data, at index: Int = 0) {
+        guard messages.count < index else { return }
         let response = HTTPURLResponse(url: messages[index].url,
                                        statusCode: code,
                                        httpVersion: nil,
