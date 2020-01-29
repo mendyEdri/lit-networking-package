@@ -11,8 +11,6 @@ import Foundation
 public class HTTPClientRetryDecorator: HTTPClientDecorator {
     
     private let httpClient: HTTPClient
-    private var maxAttempts = 5
-    private var attempts = 0
     public var onRetry: (() -> Void)?
     
     public var retryable: Retryable?
@@ -71,15 +69,6 @@ public class HTTPClientRetryDecorator: HTTPClientDecorator {
     }
     
     private func retry() -> Bool {
-        guard canRetry() == true, let request = request else { return false }
-        attempts += 1
-        get(from: request.url, method: request.method, headers: request.headers, body: request.body, completion: request.completion)
-        onRetry?()
-        
-        return true
-    }
-    
-    private func canRetry() -> Bool {
-        return attempts < maxAttempts
+        return retryable?.retry() ?? false
     }
 }
