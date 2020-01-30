@@ -52,15 +52,6 @@ public class HTTPClientRetryDecorator: HTTPClientDecorator {
     
     // Mark: Helpers
     
-    private func clientCall(from url: URL, method: HTTPMethod, headers: [String: String]?, body: [String: String]?, completion: @escaping (HTTPClientRetryDecorator.Result) -> Void) {
-        
-        httpClient.get(from: url, method: method, headers: headers, body: body) { [weak self] result in
-            guard let self = self else { return }
-            
-            completion(self.handle(client: result))
-        }
-    }
-    
     private func handle(client result: HTTPClientRetryDecorator.Result) -> HTTPClientRetryDecorator.Result {
         if case let .failure(error) = result, retry() == false {
             return .failure(error)
