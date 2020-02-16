@@ -77,6 +77,10 @@ extension HTTPClient {
     }
     
     private func dataBody(from data: Data?, or dictionary: [String: String]?) -> Data? {
+        guard data != nil || dictionary != nil else {
+            return nil
+        }
+        
         if let dataBody = data {
             return dataBody
         }
