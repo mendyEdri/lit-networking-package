@@ -20,6 +20,10 @@ public class HTTPClientMock: HTTPClient {
         messages.append((url, completion))
     }
     
+    public func get(with request: URLRequest, completion: @escaping (Result<(Data, HTTPURLResponse), Error>) -> Void) {
+        messages.append((request.url!, completion))
+    }
+    
     // MARK: Helpers
     public var requestedURLs: [URL] {
         return messages.map { $0.url }

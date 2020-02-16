@@ -50,6 +50,10 @@ public class HTTPClientRetryDecorator: HTTPClientDecorator {
         }
     }
     
+    public func get(with request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
+        fatalError("should be implemented")
+    }
+    
     // Mark: Helpers
     
     private func handle(client result: HTTPClientRetryDecorator.Result) -> HTTPClientRetryDecorator.Result {

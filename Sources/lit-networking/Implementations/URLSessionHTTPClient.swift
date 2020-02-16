@@ -25,6 +25,10 @@ public class URLSessionHTTPClient: HTTPClient {
         run(request: request, completion)
     }
     
+    public func get(with request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
+        run(request: request, completion)
+    }
+    
     private func run(request: URLRequest, _ completion: @escaping (HTTPClient.Result) -> Void) {
         let callerThread = OperationQueue.current
         session.dataTask(with: request) { [weak callerThread] data, response, error in

@@ -49,6 +49,10 @@ public final class HTTPClientAccessTokenDecorator: HTTPClientDecorator {
             }
         }
     }
+    
+    public func get(with request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
+        fatalError("should be imlemented")
+    }
 }
 
 private extension Dictionary where Key == String, Value == String {

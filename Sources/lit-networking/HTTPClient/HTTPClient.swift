@@ -24,6 +24,8 @@ public protocol HTTPClient {
     
     /** Generic request from URL function, used in Chat module  */
     func get(from url: URL, method: HTTPMethod, headers: [String: String]?, body: [String: String]?, completion: @escaping (Result) -> Void)
+    
+    func get(with request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void)
 }
 
 /** Protocol methods overloading. Instead of requires every implementation to have 3 `get()` methods, it requires the basic, and the protocol with this extension exposed 2 more usefull methods. */
@@ -42,4 +44,6 @@ extension HTTPClient {
     public func get(from url: URL, method: HTTPMethod, headers: [String: String]?, completion: @escaping (Result) -> Void) {
         get(from: url, method: method, headers: headers, body: nil, completion: completion)
     }
+    
+    
 }
