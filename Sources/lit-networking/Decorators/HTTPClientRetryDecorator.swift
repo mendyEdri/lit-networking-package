@@ -14,44 +14,30 @@ public class HTTPClientRetryDecorator: HTTPClientDecorator {
     public var onRetry: (() -> Void)?
     
     public var retryable: Retryable?
-    
-    private var request: (url: URL, method: HTTPMethod, headers: [String: String]?, body: [String: String]?, completion: ((HTTPClientRetryDecorator.Result) -> Void))?
-    
+        
     public init(http client: HTTPClient, retryable: Retryable) {
         self.httpClient = client
-        self.request = nil
         self.retryable = retryable
     }
-    
-    public func get(from url: URL, method: HTTPMethod, headers: [String : String]?, body: [String : String]?, completion: @escaping (HTTPClientRetryDecorator.Result) -> Void) {
         
-        request = (url, method, headers, body, completion)
+    public func get(with request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
         
         self.retryable?.setAction { [weak self] in
-            guard let request = self?.request else { return }
-            self?.get(from: request.url,
-                      method: request.method,
-                      headers: request.headers,
-                      body: request.body,
-                      completion: request.completion)
+            self?.get(with: request, completion: completion)
         }
         
-        httpClient.get(from: url, method: method, headers: headers, body: body) { [weak self] result in
+        httpClient.get(with: request) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .failure:
                 if self.retryable?.retry() == false {
-                  return completion(result)
+                    return completion(result)
                 }
             case .success:
                 completion(result)
             }
         }
-    }
-    
-    public func get(with request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
-        fatalError("should be implemented")
     }
     
     // Mark: Helpers

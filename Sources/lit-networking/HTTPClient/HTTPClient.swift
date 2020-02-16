@@ -16,15 +16,30 @@ public enum HTTPMethod: String {
     case UPDATE
 }
 
+extension HTTPMethod {
+    static func httpMethod(_ value: String?) -> HTTPMethod {
+        switch value {
+        case HTTPMethod.GET.rawValue:
+            return .GET
+        case HTTPMethod.POST.rawValue:
+            return .POST
+        case HTTPMethod.DELETE.rawValue:
+            return .DELETE
+        case HTTPMethod.UPDATE.rawValue:
+            return .UPDATE
+        default:
+            return .GET
+        }
+    }
+}
+
 /** Protocol for chat requests - STS, STS-metadata, Identity-Store */
 public protocol HTTPClient {
     
     /** HTTP response enum type, represents ChatHTTPClient requests' response object */
     typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
     
-    /** Generic request from URL function, used in Chat module  */
-    func get(from url: URL, method: HTTPMethod, headers: [String: String]?, body: [String: String]?, completion: @escaping (Result) -> Void)
-    
+    /** Generic request from URL function */
     func get(with request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void)
 }
 
@@ -41,9 +56,34 @@ extension HTTPClient {
     }
    
     /** Overloaded request - Gets URL, http method, headers and Completion as params  */
-    public func get(from url: URL, method: HTTPMethod, headers: [String: String]?, completion: @escaping (Result) -> Void) {
-        get(from: url, method: method, headers: headers, body: nil, completion: completion)
+    public func get(from url: URL, method: HTTPMethod, headers: [String: String]?, body: [String: String]? = nil, completion: @escaping (Result) -> Void) {
+        let request = buildRequest(from: url, method: method, headers: headers, bodyDictionary: body)
+        get(with: request, completion: completion)
+    }
+       
+    func get(from url: URL, method: HTTPMethod, headers: [String: String]?, body: Data?, completion: @escaping (Result) -> Void) {
+        let request = buildRequest(from: url, method: method, headers: headers, body: body)
+        get(with: request, completion: completion)
     }
     
     
+    private func buildRequest(from url: URL, method: HTTPMethod = .GET, headers: [String: String]? = nil, body: Data? = nil, bodyDictionary: [String: String]? = nil) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        request.allHTTPHeaderFields = headers
+        request.httpBody = dataBody(from: body, or: bodyDictionary)
+        
+        return request
+    }
+    
+    private func dataBody(from data: Data?, or dictionary: [String: String]?) -> Data? {
+        if let dataBody = data {
+            return dataBody
+        }
+        
+        if let dataFromMap = try? JSONSerialization.data(withJSONObject: dictionary ?? [:], options: .fragmentsAllowed) {
+            return dataFromMap
+        }
+        return nil
+    }
 }

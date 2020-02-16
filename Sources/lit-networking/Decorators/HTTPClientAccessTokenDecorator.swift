@@ -20,11 +20,11 @@ public final class HTTPClientAccessTokenDecorator: HTTPClientDecorator {
         case connectivity
         case badURL
     }
-
+    
     struct UnexpectedValueRepresentation: Swift.Error {}
-
+    
     private let authKey = "Authorization"
-
+    
     private var client: HTTPClient
     private var tokenAdapter: AccessTokenAdapter
     
@@ -33,25 +33,26 @@ public final class HTTPClientAccessTokenDecorator: HTTPClientDecorator {
         self.tokenAdapter = tokenAdapter
     }
     
-    public func get(from url: URL, method: HTTPMethod, headers: [String : String]?, body: [String : String]?, completion: @escaping (HTTPClient.Result) -> Void) {
+    public func get(from url: URL, method: HTTPMethod, headers: [String : String]?, completion: @escaping (HTTPClient.Result) -> Void) {
         #warning("TODO: make it serial")
         tokenAdapter.requestAccessToken { [weak self] result in
             guard let self = self else { return }
-
+            
             switch result {
             case let .failure(error):
                 completion(.failure(error))
-
+                
             case let .success(token):
                 #warning("TODO: save the requests in queue, in order to have multiple request support")
                 let decoratedHeaders = headers?.appendAuth(token: token)
-                self.client.get(from: url, method: method, headers: decoratedHeaders, body: body, completion: completion)
+                self.client.get(from: url, method: method, headers: decoratedHeaders, completion: completion)
             }
         }
     }
     
     public func get(with request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
-        fatalError("should be imlemented")
+        guard let url = request.url else { return completion ( .failure(Error.badURL) )}
+        get(from: url, method: HTTPMethod.httpMethod(request.httpMethod), headers: request.allHTTPHeaderFields, completion: completion)
     }
 }
 
