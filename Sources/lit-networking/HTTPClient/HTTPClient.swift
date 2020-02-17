@@ -20,6 +20,31 @@ public extension URLRequest {
     mutating func httpMethod(_ method: HTTPMethod) {
         self.httpMethod = method.rawValue
     }
+    
+    var httpMethodType: HTTPMethod {
+        return self.httpMethod?.httpType ?? .GET
+    }
+}
+
+private extension String {
+    var httpType: HTTPMethod {
+        switch self {
+        case HTTPMethod.GET.rawValue:
+            return .GET
+        
+        case HTTPMethod.POST.rawValue:
+            return .POST
+            
+        case HTTPMethod.DELETE.rawValue:
+            return .DELETE
+            
+        case HTTPMethod.UPDATE.rawValue:
+            return .UPDATE
+        
+        default:
+            return .GET
+        }
+    }
 }
 
 /** Protocol for chat requests - STS, STS-metadata, Identity-Store */

@@ -52,7 +52,7 @@ public final class HTTPClientAccessTokenDecorator: HTTPClientDecorator {
     
     public func get(with request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
         guard let url = request.url else { return completion ( .failure(Error.badURL) )}
-        get(from: url, method: HTTPMethod.httpMethod(request.httpMethod), headers: request.allHTTPHeaderFields, completion: completion)
+        get(from: url, method: request.httpMethodType, headers: request.allHTTPHeaderFields, completion: completion)
     }
 }
 
