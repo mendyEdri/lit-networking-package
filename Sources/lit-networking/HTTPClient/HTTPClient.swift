@@ -16,20 +16,9 @@ public enum HTTPMethod: String {
     case UPDATE
 }
 
-extension HTTPMethod {
-    static func httpMethod(_ value: String?) -> HTTPMethod {
-        switch value {
-        case HTTPMethod.GET.rawValue:
-            return .GET
-        case HTTPMethod.POST.rawValue:
-            return .POST
-        case HTTPMethod.DELETE.rawValue:
-            return .DELETE
-        case HTTPMethod.UPDATE.rawValue:
-            return .UPDATE
-        default:
-            return .GET
-        }
+public extension URLRequest {
+    mutating func httpMethod(_ method: HTTPMethod) {
+        self.httpMethod = method.rawValue
     }
 }
 
