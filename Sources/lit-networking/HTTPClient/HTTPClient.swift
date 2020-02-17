@@ -82,26 +82,8 @@ extension HTTPClient {
     
     
     private func buildRequest(from url: URL, method: HTTPMethod = .GET, headers: [String: String]? = nil, body: Data? = nil, bodyDictionary: [String: String]? = nil) -> URLRequest {
-        var request = URLRequest(url: url)
-        request.httpMethod = method.rawValue
-        request.allHTTPHeaderFields = headers
-        request.httpBody = dataBody(from: body, or: bodyDictionary)
-        
+        let request = URLRequest(url: url, method: method, headers: headers, body: body)
+
         return request
-    }
-    
-    private func dataBody(from data: Data?, or dictionary: [String: String]?) -> Data? {
-        guard data != nil || dictionary != nil else {
-            return nil
-        }
-        
-        if let dataBody = data {
-            return dataBody
-        }
-        
-        if let dataFromMap = try? JSONSerialization.data(withJSONObject: dictionary ?? [:], options: .fragmentsAllowed) {
-            return dataFromMap
-        }
-        return nil
     }
 }

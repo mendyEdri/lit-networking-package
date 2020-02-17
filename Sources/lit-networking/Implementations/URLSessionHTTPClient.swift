@@ -48,13 +48,21 @@ public class URLSessionHTTPClient: HTTPClient {
     }
 }
 
-private extension URLRequest {
+extension URLRequest {
     
     init(url: URL, method: HTTPMethod, headers: [String: String]?, body: [String: String]?) {
         self.init(url: url)
         httpMethod = method.rawValue
         
         httpBody = body?.asString(joined: "&").data(using: .utf8)
+        allHTTPHeaderFields = headers
+    }
+    
+    init(url: URL, method: HTTPMethod, headers: [String: String]?, body: Data?) {
+        self.init(url: url)
+        httpMethod = method.rawValue
+        
+        httpBody = body
         allHTTPHeaderFields = headers
     }
 }
