@@ -38,12 +38,13 @@ extension HTTPClient {
         get(from: url, method: .GET, headers: nil, completion: completion)
     }
    
-    /** Overloaded request - Gets URL, http method, headers and Completion as params  */
+    /** Overloaded request - Gets URL, http method, headers, body dictionary and Completion as params  */
     public func get(from url: URL, method: HTTPMethod, headers: [String: String]?, body: [String: String]? = nil, completion: @escaping (Result) -> Void) {
         let request = buildRequest(from: url, method: method, headers: headers, bodyDictionary: body)
         get(with: request, completion: completion)
     }
-       
+    
+    /** Overloaded request - Gets URL, http method, headers, body data and Completion as params  */
     public func get(from url: URL, method: HTTPMethod, headers: [String: String]?, body: Data?, completion: @escaping (Result) -> Void) {
         let request = buildRequest(from: url, method: method, headers: headers, body: body)
         get(with: request, completion: completion)
