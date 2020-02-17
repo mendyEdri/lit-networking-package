@@ -16,37 +16,6 @@ public enum HTTPMethod: String {
     case UPDATE
 }
 
-public extension URLRequest {
-    mutating func httpMethod(_ method: HTTPMethod) {
-        self.httpMethod = method.rawValue
-    }
-    
-    var httpMethodType: HTTPMethod {
-        return self.httpMethod?.httpType ?? .GET
-    }
-}
-
-private extension String {
-    var httpType: HTTPMethod {
-        switch self {
-        case HTTPMethod.GET.rawValue:
-            return .GET
-        
-        case HTTPMethod.POST.rawValue:
-            return .POST
-            
-        case HTTPMethod.DELETE.rawValue:
-            return .DELETE
-            
-        case HTTPMethod.UPDATE.rawValue:
-            return .UPDATE
-        
-        default:
-            return .GET
-        }
-    }
-}
-
 /** Protocol for chat requests - STS, STS-metadata, Identity-Store */
 public protocol HTTPClient {
     
@@ -79,11 +48,12 @@ extension HTTPClient {
         let request = buildRequest(from: url, method: method, headers: headers, body: body)
         get(with: request, completion: completion)
     }
-    
-    
-    private func buildRequest(from url: URL, method: HTTPMethod = .GET, headers: [String: String]? = nil, body: Data? = nil, bodyDictionary: [String: String]? = nil) -> URLRequest {
-        let request = URLRequest(url: url, method: method, headers: headers, body: body)
+}
 
-        return request
-    }
+private extension HTTPClient {
+    func buildRequest(from url: URL, method: HTTPMethod = .GET, headers: [String: String]? = nil, body: Data? = nil, bodyDictionary: [String: String]? = nil) -> URLRequest {
+        let request = URLRequest.builder(url: url, method: method, headers: headers, bodyData: body, bodyMap: bodyDictionary)
+        
+         return request
+     }
 }
