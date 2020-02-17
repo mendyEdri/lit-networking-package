@@ -44,7 +44,7 @@ extension HTTPClient {
         get(with: request, completion: completion)
     }
        
-    func get(from url: URL, method: HTTPMethod, headers: [String: String]?, body: Data?, completion: @escaping (Result) -> Void) {
+    public func get(from url: URL, method: HTTPMethod, headers: [String: String]?, body: Data?, completion: @escaping (Result) -> Void) {
         let request = buildRequest(from: url, method: method, headers: headers, body: body)
         get(with: request, completion: completion)
     }
