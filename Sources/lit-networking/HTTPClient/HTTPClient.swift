@@ -27,25 +27,25 @@ public protocol HTTPClient {
 }
 
 /** Protocol methods overloading. Instead of requires every implementation to have 3 `get()` methods, it requires the basic, and the protocol with this extension exposed 2 more usefull methods. */
-extension HTTPClient {
+public extension HTTPClient {
     /** Overloaded request - Gets URL and Completion as params  */
-    public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
+    func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
         get(from: url, method: .GET, completion: completion)
     }
     
     /** Overloaded request - Gets URL, http method and Completion as params  */
-    public func get(from url: URL, method: HTTPMethod, completion: @escaping (HTTPClient.Result) -> Void) {
+    func get(from url: URL, method: HTTPMethod, completion: @escaping (HTTPClient.Result) -> Void) {
         get(from: url, method: .GET, headers: nil, completion: completion)
     }
    
     /** Overloaded request - Gets URL, http method, headers, body dictionary and Completion as params  */
-    public func get(from url: URL, method: HTTPMethod, headers: [String: String]?, body: [String: String]? = nil, completion: @escaping (Result) -> Void) {
+    func get(from url: URL, method: HTTPMethod, headers: [String: String]?, body: [String: String]? = nil, completion: @escaping (Result) -> Void) {
         let request = buildRequest(from: url, method: method, headers: headers, bodyDictionary: body)
         get(with: request, completion: completion)
     }
     
     /** Overloaded request - Gets URL, http method, headers, body data and Completion as params  */
-    public func get(from url: URL, method: HTTPMethod, headers: [String: String]?, body: Data?, completion: @escaping (Result) -> Void) {
+    func get(from url: URL, method: HTTPMethod, headers: [String: String]?, body: Data?, completion: @escaping (Result) -> Void) {
         let request = buildRequest(from: url, method: method, headers: headers, body: body)
         get(with: request, completion: completion)
     }
